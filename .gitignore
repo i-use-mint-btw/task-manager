@@ -132,3 +132,5 @@ dist
 
 # go server stuff
 server/.env
+# air - temporary files (go auto recompile utility)
+server/tmp
