@@ -1,0 +1,1 @@
+ALTER TABLE users RENAME sessionID to session_id;

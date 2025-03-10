@@ -1,0 +1,1 @@
+ALTER TABLE users ALTER COLUMN session_id TYPE VARCHAR(45); 

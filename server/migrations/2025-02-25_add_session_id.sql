@@ -1,0 +1,1 @@
+ALTER TABLE users ADD sessionID VARCHAR(32) UNIQUE;
