@@ -29,7 +29,7 @@ func handlePostOnRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if ok, errors := utils.ValidateInputs(&dto); !ok {
+	if ok, errors := utils.ValidateInputs(dto); !ok {
 		utils.ValidationError(w, errors, http.StatusUnprocessableEntity)
 		return
 	}
