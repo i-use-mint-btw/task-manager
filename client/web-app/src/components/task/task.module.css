@@ -1,0 +1,22 @@
+.rootContainer {
+    background: #2c2c38;
+    width: 100%;
+    max-width: 400px;
+    height: 85px;
+    margin: 20px 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+}
+
+.taskTitle {
+    color: white;
+    font-weight: 600;
+    line-height: 30px;
+}
+
+.subtaskCompletionStatus {
+    color: #868d9d;
+    font-size: 14px;
+}

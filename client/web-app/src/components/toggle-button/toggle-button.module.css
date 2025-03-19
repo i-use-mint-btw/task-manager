@@ -1,0 +1,25 @@
+.rootContainer {
+    width: 38px;
+    height: 19px;
+    border: none;
+    border-radius: 10px;
+}
+
+.enabled {
+    display: block;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: white;
+    transform: translate(21px);
+    transition: all 200ms ease-in-out;
+}
+
+.disabled {
+    display: block;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: white;
+    transition: all 200ms ease-in-out;
+}

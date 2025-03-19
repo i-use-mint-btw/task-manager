@@ -1,0 +1,85 @@
+.rootContainer {
+    background: #2c2c38;
+    flex-grow: 1;
+    max-width: 350px;
+    height: 100vh;
+    border-right: 1px solid #868d9d;
+}
+
+.sidebarLogoContainer {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    color: #EEEEEE;
+}
+
+.boardCounter {
+    color: #868d9d;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding-left: 20px;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.mainSidebarContentContainer {
+    height: 100%;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.mainBoardInfoContainer {
+    padding-right: 20px;
+}
+
+.sidebarButtonsContainer {
+    height: 100%;
+    margin-top: 40px;
+}
+
+.darkModeToggleContainer {
+    background: #21212d;
+    margin: 0 20px;
+    min-height: 40px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.darkModeToggleContainer > div {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    max-width: 140px;
+}
+
+.lightModeIcon {
+    color: #868d9d;
+}
+
+.darkModeIcon {
+    color: #868d9d;
+}
+
+.hideSidebarButtonContainer {
+    margin: 20px 0 0 0;
+}
+
+.hideSidebarButton {
+    font-weight: 500;
+    column-gap: 10px;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    letter-spacing: 1px;
+    height: 30px;
+    padding: 0 20px;
+}
+
+.hideSidebarButton > * {
+    color: #868d9d;
+}

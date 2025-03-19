@@ -2,12 +2,12 @@ import { useState, useEffect, FormEvent } from "react";
 import styles from "./login.module.css";
 import { useNavigate } from "react-router";
 import { API_URL } from "../../constants";
+import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [timesSubmitted, setTimesSubmitted] = useState<number>(0);
-  const [isLoginSuccessful, setIsLoginSuccessful] = useState<boolean>(false);
 
   function handleEmailChange(value: string) {
     setEmail(value);
@@ -19,8 +19,7 @@ export default function LoginPage() {
 
   function handleSubmit(e: FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    e.stopPropagation();
-    setTimesSubmitted((prevTimes) => prevTimes + 1);
+    setTimesSubmitted(prevTimes => prevTimes + 1);
   }
 
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ export default function LoginPage() {
           body: JSON.stringify({ email, password }),
         });
         if (res.status === 200) {
-          setIsLoginSuccessful(true);
+          navigate("/")
         }
       } catch (e) {
         console.log(e);
@@ -43,14 +42,8 @@ export default function LoginPage() {
     fetchData();
   }, [timesSubmitted]);
 
-  useEffect(() => {
-    if (isLoginSuccessful) {
-      navigate("/", { replace: true });
-      return;
-    }
-  }, [isLoginSuccessful]);
-
   return (
+    <div className={styles.rootContainer}>
     <div className={styles.mainContainer}>
       <h1 className={styles.formTitle}>Login</h1>
       <form className={styles.formContainer}>
@@ -74,6 +67,11 @@ export default function LoginPage() {
           Submit
         </button>
       </form>
+      <p style={{ marginTop: "20px" }}>
+        Dont have an account?
+        <Link to="/register"> register</Link>
+      </p>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,21 @@
+.rootContainer {
+    margin: 0 30px;
+    min-width: 300px;
+}
+
+.columnLabelContainer {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.columnLabel {
+    text-transform: uppercase;
+    color: #868d9d;
+}
+
+.circularIcon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}

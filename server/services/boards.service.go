@@ -9,7 +9,7 @@ import (
 )
 
 func FindBoards(userID string) (*[]models.Board, error) {
-	rows, err := storage.DB.Query("SELECT id, title, user_id, created_at FROM boards WHERE boards.user_id=$1", userID)
+	rows, err := storage.DB.Query("SELECT id, title FROM boards WHERE boards.user_id=$1", userID)
 	if err != nil {
 		return nil, err
 	}
@@ -18,7 +18,7 @@ func FindBoards(userID string) (*[]models.Board, error) {
 
 	for rows.Next() {
 		var board models.Board
-		rows.Scan(&board.ID, &board.Title, &board.UserID, &board.CreatedAt)
+		rows.Scan(&board.ID, &board.Title)
 
 		tasks, err := FindTasks(board.ID)
 

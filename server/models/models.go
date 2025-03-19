@@ -16,10 +16,10 @@ type User struct {
 
 type Board struct {
 	ID        string  	`json:"id"`
-	UserID    string	`json:"userID"`
+	//UserID    string	`json:"userID"`
 	Title     string	`json:"title"`
 	Tasks     []Task	`json:"tasks"`
-	CreatedAt time.Time	`json:"createdAt"`
+	//CreatedAt time.Time	`json:"createdAt"`
 	// User      User
 }
 

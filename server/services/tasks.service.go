@@ -9,7 +9,7 @@ import (
 )
 
 func FindTasks(boardID string) (*[]models.Task, error) {
-	rows, err := storage.DB.Query("SELECT * FROM tasks WHERE tasks.board_id=$1", boardID)
+	rows, err := storage.DB.Query("SELECT id, board_id, title, description, status FROM tasks WHERE tasks.board_id=$1", boardID)
 
 	if err != nil {
 		return nil, err
@@ -19,7 +19,7 @@ func FindTasks(boardID string) (*[]models.Task, error) {
 
 	for rows.Next() {
 		var task models.Task
-		err = rows.Scan(&task.ID, &task.BoardID, &task.Title, &task.Description, &task.Status, &task.CreatedAt)
+		err = rows.Scan(&task.ID, &task.BoardID, &task.Title, &task.Description, &task.Status)
 
 		if err != nil {
 			return nil, err

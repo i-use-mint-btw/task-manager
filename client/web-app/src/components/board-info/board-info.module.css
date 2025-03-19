@@ -1,0 +1,47 @@
+.rootContainer {
+    display: block;
+    width: 100%;
+    border: none;
+    background: none;
+}
+
+.boardInfoContainerSelected {
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    background-color: #645fc6;
+    border-radius: 0 30px 30px 0;
+}
+
+.boardInfoContainerDeselected {
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    background: none;
+    color: #868d9d;
+    border-radius: 0 30px 30px 0;
+}
+
+.boardIconSelected {
+    color: white;
+    margin: 0 10px;
+}
+
+.boardIconDeselected {
+    color: #868d9d;
+    margin: 0 10px;
+}
+
+.boardTitleSelected {
+    color: white;
+    text-transform: capitalize;
+}
+
+.boardTitleDeselected {
+    color: #868d9d;
+    text-transform: capitalize;
+}
