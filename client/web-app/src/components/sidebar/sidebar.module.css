@@ -4,6 +4,8 @@
     max-width: 350px;
     height: 100vh;
     border-right: 1px solid #868d9d;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebarLogoContainer {
@@ -27,7 +29,10 @@
 .mainSidebarContentContainer {
     height: 100%;
     width: 100%;
-    margin-top: 30px;
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .mainBoardInfoContainer {
@@ -35,7 +40,6 @@
 }
 
 .sidebarButtonsContainer {
-    height: 100%;
     margin-top: 40px;
 }
 

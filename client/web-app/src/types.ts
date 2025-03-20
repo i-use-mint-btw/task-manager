@@ -10,4 +10,10 @@ export interface Task {
     title: string
     description: string
     status: "todo" | "doing" | "done"
+    subtasks: Subtask[]
+}
+
+export interface Subtask {
+    id: number
+    title: string
 }

@@ -11,7 +11,7 @@ export default function Task(props: IProps) {
             <div className={styles.rootContainer}>
                 <div className={styles.mainContainer}>
                     <p className={styles.taskTitle}>{props.data.title}</p>
-                    <p className={styles.subtaskCompletionStatus}>0 of 3 subtasks</p>
+                    <p className={styles.subtaskCompletionStatus}>0 of {props.data.subtasks && props.data.subtasks.length} subtasks</p>
                 </div>
             </div>
         </>
