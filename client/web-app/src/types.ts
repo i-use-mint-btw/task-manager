@@ -6,7 +6,7 @@ export interface Board {
 
 export interface Task {
     id: number
-    boardID: number
+    boardID: string
     title: string
     description: string
     status: "todo" | "doing" | "done"

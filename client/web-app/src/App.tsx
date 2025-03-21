@@ -7,6 +7,10 @@ import { useNavigate } from "react-router";
 import { Board as BoardModel } from "./types";
 import Board from "./components/board/Board";
 
+// TODO: Stop taskcolumn from overlapping when there are too many tasks
+// Make it so that subtasks are sent along with the dto to create a new task
+// Add completion status to subtask
+
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedBoardID, setSelectedBoardID] = useState<number>(-1);
@@ -20,6 +24,14 @@ export default function App() {
   function handleBoardInfoClick(id: number) {
     setSelectedBoardID(id);
     return undefined;
+  }
+
+  function handleCreateNewBoardClick() {
+
+  }
+
+  function handleAddNewTaskClick() {
+
   }
 
   useEffect(() => {
@@ -54,6 +66,7 @@ export default function App() {
             onBoardInfoClick={handleBoardInfoClick}
             toggle={toggleSidebarOpen}
             boards={boards}
+            onCreateNewBoardClick={handleCreateNewBoardClick}
           />
         )}
         <div className={styles.mainContentContainer}>
@@ -64,6 +77,7 @@ export default function App() {
                 ? boards[selectedBoardID].title
                 : "No board selected"
             }
+            onAddNewTaskClick={handleAddNewTaskClick}
           />
           <div className={styles.boardContainer}>
             {boards[selectedBoardID] ? (

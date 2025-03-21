@@ -6,11 +6,10 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 interface IProps {
   boardName: string;
   toggle: () => void
+  onAddNewTaskClick: () => void
 }
 
 export default function Header(props: IProps) {
-  function handleAddNewTask() {}
-
   return (
     <>
       <header className={styles.rootContainer}>
@@ -19,7 +18,7 @@ export default function Header(props: IProps) {
           <Button
             label="+Add New Task"
             color="#645fc6"
-            onClick={handleAddNewTask}
+            onClick={props.onAddNewTaskClick}
           />
           <button className={styles.optionsButton} onClick={props.toggle}>
             <FontAwesomeIcon className={styles.elipsisIcon} icon={faEllipsisVertical} />

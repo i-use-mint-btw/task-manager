@@ -1,6 +1,7 @@
 .rootContainer {
     background: #2c2c38;
     flex-grow: 1;
+    min-width: 250px;
     max-width: 350px;
     height: 100vh;
     border-right: 1px solid #868d9d;
@@ -9,7 +10,7 @@
 }
 
 .sidebarLogoContainer {
-    height: 90px;
+    height: 117px;
     display: flex;
     align-items: center;
     padding-left: 20px;
@@ -23,7 +24,7 @@
     letter-spacing: 2px;
     padding-left: 20px;
     font-size: 15px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .mainSidebarContentContainer {

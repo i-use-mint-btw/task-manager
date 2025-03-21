@@ -1,0 +1,23 @@
+.rootContainer {
+    width: 100%;
+    border: none;
+    background: none;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.rootContainer:active {
+    transform: none;
+    opacity: .7;
+}
+
+.boardIcon {
+    color: #645fc6;
+    margin-right: 8px;
+}
+
+.boardTitle {
+    color: #645fc6;
+}

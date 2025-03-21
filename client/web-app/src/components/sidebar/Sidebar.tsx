@@ -5,12 +5,14 @@ import ToggleButton from "../toggle-button/ToggleButton";
 import { useState } from "react";
 import BoardInfo from "../board-info/BoardInfo";
 import { Board } from "../../types";
+import CreateBoardButton from "../create-board-button/CreateBoardButton";
 
 interface IProps {
   boards: Board[];
   toggle: () => void;
   selectedBoardID: number;
   onBoardInfoClick: (id: number) => undefined;
+  onCreateNewBoardClick: () => void
 }
 
 export default function Sidebar(props: IProps) {
@@ -54,6 +56,7 @@ export default function Sidebar(props: IProps) {
                 />
               );
             })}
+            <CreateBoardButton onClick={props.onCreateNewBoardClick} />
           </div>
           <div className={styles.sidebarButtonsContainer}>
             <div className={styles.darkModeToggleContainer}>
