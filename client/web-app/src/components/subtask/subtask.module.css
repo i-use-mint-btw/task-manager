@@ -1,0 +1,22 @@
+.rootContainer {
+    display: flex;
+    background: #21212d;
+    padding: 12px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.completionCheckbox {
+    margin-right: 12px;
+}
+
+.title {
+    color: white;
+    font-size: 14px;
+}
+
+.completedTitle {
+    color: #868d9d;
+    font-size: 14px;
+    text-decoration: line-through;
+}

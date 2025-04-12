@@ -30,7 +30,7 @@ type Task struct {
 	Description string		`json:"description"`
 	Status 		string		`json:"status"`
 	Subtasks    []Subtask	`json:"subtasks"`
-	CreatedAt   time.Time 	`json:"createdAt"`
+	// CreatedAt   time.Time 	`json:"createdAt"`
 	// Board       Board
 }
 
@@ -38,6 +38,7 @@ type Subtask struct {
 	ID          string		`json:"id"`
 	TaskID      string		`json:"taskID"`
 	Title       string		`json:"title"`
-	CreatedAt   time.Time	`json:"createdAt"`
+	// CreatedAt   time.Time	`json:"createdAt"`
+	Completed 	bool		`json:"completed"`
 	// Task        Task
 }

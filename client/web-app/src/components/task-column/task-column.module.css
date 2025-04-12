@@ -1,17 +1,27 @@
 .rootContainer {
     margin: 0 30px;
     min-width: 300px;
+    height: 100%;
+}
+
+.taskList {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    overflow-y: scroll;
 }
 
 .columnLabelContainer {
     display: flex;
     align-items: center;
-    column-gap: 10px;
+    margin-bottom: 20px;
 }
 
 .columnLabel {
     text-transform: uppercase;
     color: #868d9d;
+    margin-left: 10px;
 }
 
 .circularIcon {

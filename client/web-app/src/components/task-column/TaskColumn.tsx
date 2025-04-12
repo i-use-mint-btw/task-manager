@@ -6,6 +6,7 @@ interface IProps {
   label: string;
   tasks: TaskModel[];
   iconColor: string
+  onTaskClick: (task: TaskModel) => void
 }
 
 export default function TaskColumn(props: IProps) {
@@ -16,9 +17,11 @@ export default function TaskColumn(props: IProps) {
             <div style={{background: props.iconColor}} className={styles.circularIcon}></div>
             <p className={styles.columnLabel}>{props.label} ({props.tasks.length})</p>
         </div>
-        {props.tasks.map((task, i) => (
-          <Task key={i} data={task} />
-        ))}
+        <div className={styles.taskList}>
+          {props.tasks.map((task, i) => (
+            <Task id={task.id} key={i} data={task} onClick={props.onTaskClick} />
+          ))}
+        </div>
       </div>
     </>
   );

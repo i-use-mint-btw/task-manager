@@ -4,6 +4,7 @@ interface IProps {
   label: string;
   onClick: () => void;
   color?: string;
+  textColor?: string;
 }
 
 export default function Button(props: IProps) {
@@ -11,7 +12,7 @@ export default function Button(props: IProps) {
     <>
       <button
         className={styles.button}
-        style={{ backgroundColor: props.color ?? "blue" }}
+        style={{ backgroundColor: props.color ?? "blue", color: props.textColor ?? "white", paddingBlock: 15 }}
         onClick={props.onClick}
       >
         {props.label}

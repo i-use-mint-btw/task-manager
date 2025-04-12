@@ -4,21 +4,38 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Header from "./components/header/Header";
 import { API_URL } from "./constants";
 import { useNavigate } from "react-router";
-import { Board as BoardModel } from "./types";
+import { Board as BoardModel, Task } from "./types";
 import Board from "./components/board/Board";
+import ViewTaskModal from "./components/view-task-modal/ViewTaskModal";
+import CreateTaskModal from "./components/create-task-modal/CreateTaskModal";
+import CreateBoardModal from "./components/create-board-modal/CreateBoardModal";
 
 // TODO: Stop taskcolumn from overlapping when there are too many tasks
 // Make it so that subtasks are sent along with the dto to create a new task
 // Add completion status to subtask
 
 export default function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [selectedBoardID, setSelectedBoardID] = useState<number>(-1);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [isViewTaskModalVisible, setIsViewTaskModalVisible] =
+    useState<boolean>(false);
+  const [isCreateTaskModalVisible, setIsCreateTaskModalVisible] =
+    useState<boolean>(false);
+  const [isCreateBoardModalVisible, setIsCreateBoardModalVisible] =
+    useState<boolean>(false);
+  const [selectedBoardID, setSelectedBoardID] = useState<number>(0);
+  const [selectedTask, setSelectedTask] = useState<Task>();
   const [boards, setBoards] = useState<BoardModel[]>([]);
+  const [resourcesAdded, setResourcesAdded] = useState<number>(0);
+  const [error, setError] = useState<unknown | null>();
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   function toggleSidebarOpen() {
     setIsSidebarOpen((prev) => !prev);
+  }
+
+  function toggleCreateTaskModalVisibility() {
+    setIsCreateTaskModalVisible((prev) => !prev);
   }
 
   function handleBoardInfoClick(id: number) {
@@ -26,12 +43,32 @@ export default function App() {
     return undefined;
   }
 
-  function handleCreateNewBoardClick() {
+  function handleModalOutOfBoundsClick() {
+    setIsCreateTaskModalVisible(false);
+    setIsViewTaskModalVisible(false);
+    setIsCreateBoardModalVisible(false);
+  }
 
+  function handleTaskClick(task: Task) {
+    setSelectedTask(task);
+    setIsViewTaskModalVisible(true);
+  }
+
+  async function handleCreateNewBoardClick() {
+    setIsCreateBoardModalVisible(true)
+  }
+
+  function handleResourceAdded() {
+    setResourcesAdded(prev => prev + 1)
   }
 
   function handleAddNewTaskClick() {
+    if (selectedBoardID === -1) {
+      alert("Please select a board first.");
+      return;
+    }
 
+    setIsCreateTaskModalVisible(true);
   }
 
   useEffect(() => {
@@ -55,11 +92,32 @@ export default function App() {
       }
     }
     fetchBoards();
-  }, []);
+  }, [navigate, resourcesAdded]);
 
   return (
     <>
       <div className={styles.rootContainer}>
+        {selectedTask && (
+          <ViewTaskModal
+            onOutOfBoundsClick={handleModalOutOfBoundsClick}
+            visible={isViewTaskModalVisible}
+            data={selectedTask}
+            boardID={boards[selectedBoardID]?.id}
+            onNewResourceAdded={setResourcesAdded}
+          />
+        )}
+        <CreateTaskModal
+          toggleVisibility={toggleCreateTaskModalVisibility}
+          onNewResourceAdded={setResourcesAdded}
+          boardID={boards[selectedBoardID]?.id}
+          onOutOfBoundsClick={handleModalOutOfBoundsClick}
+          visible={isCreateTaskModalVisible}
+        />
+        <CreateBoardModal 
+          visible={isCreateBoardModalVisible}
+          onResourceAdded={handleResourceAdded}
+          onOutOfBoundsClick={handleModalOutOfBoundsClick}
+        />
         {isSidebarOpen && (
           <Sidebar
             selectedBoardID={selectedBoardID}
@@ -80,10 +138,11 @@ export default function App() {
             onAddNewTaskClick={handleAddNewTaskClick}
           />
           <div className={styles.boardContainer}>
-            {boards[selectedBoardID] ? (
-              <Board data={boards[selectedBoardID]} />
-            ) : (
-              <div style={{ background: "#21212d", height: "100%" }}></div>
+            {boards[selectedBoardID] && (
+              <Board
+                data={boards[selectedBoardID]}
+                onTaskClick={handleTaskClick}
+              />
             )}
           </div>
         </div>

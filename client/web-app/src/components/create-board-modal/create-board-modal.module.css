@@ -1,0 +1,24 @@
+.rootContainer {
+    padding: 25px;
+}
+
+.rootContainer > label {
+    display: block;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.rootContainer > input {
+    background: transparent;
+    border: 1px solid #5a5a66;
+    color: white;
+    width: 100%;
+    padding: 13px;
+    resize: none;
+    border-radius: 3px;
+}
+
+.rootContainer > input::placeholder {
+    font-size: 15px;
+    color: #5a5a66;
+}

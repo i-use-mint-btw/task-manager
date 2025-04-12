@@ -2,6 +2,7 @@ package services
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/i-use-mint-btw/kanban-task-manager/dtos"
 	"github.com/i-use-mint-btw/kanban-task-manager/models"
@@ -39,13 +40,33 @@ func FindTasks(boardID string) (*[]models.Task, error) {
 }
 
 func CreateTask(dto *dtos.CreateTaskDTO, boardID string) error {
-	_, err := storage.DB.Exec("INSERT INTO tasks (board_id, title, description, status) VALUES ($1,$2,$3,$4)", boardID, dto.Title, dto.Description, dto.Status)
+	row := storage.DB.QueryRow("INSERT INTO tasks (board_id, title, description, status) VALUES ($1,$2,$3,$4) RETURNING id", boardID, dto.Title, dto.Description, dto.Status)
 
-	return err
+	var taskID string
+	err := row.Scan(&taskID)
+
+	if err != nil {
+		return err
+	}
+
+	err = CreateSubtasks(&dto.Subtasks, taskID)	
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func UpdateTask(dto *dtos.UpdateTaskDTO, taskID string) error {
-	_, err := storage.DB.Exec("UPDATE tasks SET title=$1, description=$2, status=$3 WHERE id=$4", dto.Title, dto.Description, dto.Status, taskID)
+	err := UpdateSubtasks(&dto.Subtasks)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	_, err = storage.DB.Exec("UPDATE tasks SET title=$1, description=$2, status=$3 WHERE id=$4", dto.Title, dto.Description, dto.Status, taskID)
 	return err
 }
 

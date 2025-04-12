@@ -1,0 +1,67 @@
+.rootContainer {
+    width: 87%;
+    height: 90%;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.title {
+    color: white;
+    letter-spacing: 1px;
+    word-spacing: -2px;
+    line-height: 23px;
+    font-size: 17px;
+}
+
+.optionsIcon {
+    margin-left: 30px;
+    color: #868d9d;
+    height: 26px;
+}
+
+.description {
+    color: #868d9d;
+    margin-bottom: 30px;
+    line-height: 25px;
+}
+
+.subtaskCompletionCount {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.subtasksAndStatusContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.subtasksContainer {
+    overflow-y: scroll;
+    max-height: 225px;
+    margin-bottom: 30px;
+}
+
+.statusContainer > label {
+    color: white;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.statusContainer > select {
+    background: transparent;
+    width: 100%;
+    padding: 10px 15px;
+    color: white;
+    border: 1px solid #868d9d;
+}
