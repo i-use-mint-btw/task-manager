@@ -1,18 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Task, TaskStatus } from "../../types";
-import ModalShell from "../modal-shell/ModalShell";
+import Modal from "../modal/Modal";
 import styles from "./view-task-modal.module.css";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import Subtask from "../subtask/Subtask";
 import { API_URL } from "../../constants";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface IProps {
-  visible: boolean;
   data: Task;
-  onOutOfBoundsClick: () => void
-  boardID: string
-  onNewResourceAdded: Dispatch<SetStateAction<number>>
+  onOutOfBoundsClick: () => void;
+  boardID: string;
+  onNewResourceAdded: Dispatch<SetStateAction<number>>;
 }
 
 export default function ViewTaskModal(props: IProps) {
@@ -24,7 +23,9 @@ export default function ViewTaskModal(props: IProps) {
     });
   }
 
-  const [status, setStatus] = useState<TaskStatus>(props.data.status && props.data.status)
+  const [status, setStatus] = useState<TaskStatus>(
+    props.data.status && props.data.status
+  );
 
   async function handleModalOutOfBoundsClick() {
     try {
@@ -35,12 +36,25 @@ export default function ViewTaskModal(props: IProps) {
           credentials: "include",
           body: JSON.stringify({
             title: props.data.title,
-            description: props.data.description ? props.data.description : "No description",
+            description: props.data.description
+              ? props.data.description
+              : "No description",
             status: status.toLocaleLowerCase(),
-            subtasks: props.data.subtasks ? props.data.subtasks.map(subtask => {
-              if (status.toLocaleLowerCase() === "done") return {id: subtask.id, title: subtask.title, completed: true}
-              return {id: subtask.id, title: subtask.title, completed: subtask.completed}
-            }) : [],
+            subtasks: props.data.subtasks
+              ? props.data.subtasks.map((subtask) => {
+                  if (status.toLocaleLowerCase() === "done")
+                    return {
+                      id: subtask.id,
+                      title: subtask.title,
+                      completed: true,
+                    };
+                  return {
+                    id: subtask.id,
+                    title: subtask.title,
+                    completed: subtask.completed,
+                  };
+                })
+              : [],
           }),
         }
       );
@@ -49,8 +63,8 @@ export default function ViewTaskModal(props: IProps) {
         throw new Error("Error when making request");
       }
 
-      setStatus(props.data.status)
-      props.onOutOfBoundsClick()
+      setStatus(props.data.status);
+      props.onOutOfBoundsClick();
       props.onNewResourceAdded((prev) => prev + 1);
     } catch (e) {
       console.error(e);
@@ -59,8 +73,13 @@ export default function ViewTaskModal(props: IProps) {
 
   return (
     <>
-      <ModalShell onOutOfBoundsClick={handleModalOutOfBoundsClick} visible={props.visible}>
-        <div onClick={e => e.stopPropagation()} className={styles.rootContainer}>
+      <Modal
+        onOutOfBoundsClick={handleModalOutOfBoundsClick}
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={styles.rootContainer}
+        >
           <div className={styles.titleContainer}>
             <h3 className={styles.title}>{props.data.title}</h3>
             <FontAwesomeIcon
@@ -74,7 +93,7 @@ export default function ViewTaskModal(props: IProps) {
               : "No description added"}
           </p>
           <p className={styles.subtaskCompletionCount}>
-            Subtasks ({completedCount} of {" "}
+            Subtasks ({completedCount} of{" "}
             {props.data.subtasks ? props.data.subtasks.length : "0"})
           </p>
           <div className={styles.subtasksAndStatusContainer}>
@@ -86,7 +105,12 @@ export default function ViewTaskModal(props: IProps) {
             </div>
             <div className={styles.statusContainer}>
               <label htmlFor="Status">Status</label>
-              <select name="Status" id="Status" onChange={e => setStatus(e.target.value as TaskStatus)} value={status}>
+              <select
+                name="Status"
+                id="Status"
+                onChange={(e) => setStatus(e.target.value as TaskStatus)}
+                value={status}
+              >
                 <option value="Todo">Todo</option>
                 <option value="Doing">Doing</option>
                 <option value="Done">Done</option>
@@ -94,7 +118,7 @@ export default function ViewTaskModal(props: IProps) {
             </div>
           </div>
         </div>
-      </ModalShell>
+      </Modal>
     </>
   );
 }

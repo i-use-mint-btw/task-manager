@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Button from "../button/Button";
 import CreateSubtask from "../create-subtask/CreateSubtask";
-import ModalShell from "../modal-shell/ModalShell";
+import Modal from "../modal/Modal";
 import styles from "./create-task-modal.module.css";
 import { API_URL } from "../../constants";
 import { CreateSubtask as CreateSubtaskModel } from "../../types";
@@ -40,13 +40,28 @@ export default function CreateTaskModal(props: IProps) {
   }
 
   function handleAddNewSubtask() {
-    setSubtasks(prev => {
+    setSubtasks((prev) => {
       if (prev.length === 0) {
-        return [{id: 1, completed: false, title: "", placeholder: "e.g. Add some sugar"}]
+        return [
+          {
+            id: 1,
+            completed: false,
+            title: "",
+            placeholder: "e.g. Add some sugar",
+          },
+        ];
       }
 
-      return [...prev, {id: prev[prev.length - 1].id + 1, completed: false, title: "", placeholder: "e.g. Add some sugar"}]
-    })
+      return [
+        ...prev,
+        {
+          id: prev[prev.length - 1].id + 1,
+          completed: false,
+          title: "",
+          placeholder: "e.g. Add some sugar",
+        },
+      ];
+    });
   }
 
   function handleSubtaskChange(id: number, newValue: string) {
@@ -57,8 +72,8 @@ export default function CreateTaskModal(props: IProps) {
   }
 
   function handleSubtaskRemoval(id: number) {
-    setSubtasks(prevSubtasks => {
-      return prevSubtasks.filter(prevSubtask => prevSubtask.id !== id)
+    setSubtasks((prevSubtasks) => {
+      return prevSubtasks.filter((prevSubtask) => prevSubtask.id !== id);
     });
     console.log(subtasks);
   }
@@ -99,7 +114,7 @@ export default function CreateTaskModal(props: IProps) {
 
   return (
     <>
-      <ModalShell
+      <Modal
         visible={props.visible}
         onOutOfBoundsClick={props.onOutOfBoundsClick}
       >
@@ -174,7 +189,7 @@ export default function CreateTaskModal(props: IProps) {
 
           <Button onClick={createNewTask} label="Create Task" color="#645fc6" />
         </div>
-      </ModalShell>
+      </Modal>
     </>
   );
 }

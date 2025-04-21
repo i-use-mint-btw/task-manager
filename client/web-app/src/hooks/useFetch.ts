@@ -1,15 +1,31 @@
-import { useEffect } from "react"
+import {useState, useEffect} from "react"
 
-type HTTPMethods = "GET" | "POST" | "PUT" | "DELETE"
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS"
 
-export default function useFetch(url: string, method: HTTPMethods, body = {}) {
-    async function fetchData() {
-        const res = await fetch(url, {method, body: JSON.stringify(body)})
-        const payload = await res.json()
-        return payload
-    }
+export default function useFetch<T>(url: string, method: Method, options?: RequestInit) {
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<any>(null)
+    const [payload, setPayload] = useState<T>({} as T)
 
     useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            setError(null)
+
+            try {
+                const res = await fetch(url, {method, ...options})
+                setPayload(await res.json())
+            }
+            catch (e) {
+                setError(e)
+            }
+            finally {
+                setLoading(false)
+            }
+        }
+
         fetchData()
-    })
+    }, [])
+
+    return { payload, loading, error}
 }
