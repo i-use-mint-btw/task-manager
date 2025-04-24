@@ -1,7 +1,6 @@
 import { FormEvent, useState } from "react";
 import styles from "./registration.module.css";
 import { useNavigate } from "react-router";
-import { API_URL } from "../../constants";
 import { Link } from "react-router-dom";
 import useAuth from "../../context/AuthContext";
 
@@ -11,12 +10,12 @@ import useAuth from "../../context/AuthContext";
 export default function RegistrationPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const {isAuthenticated, login} = useAuth()
+  const {isAuthenticated, register} = useAuth()
   const navigate = useNavigate();
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    await login(email, password)
+    await register(email, password)
     if (isAuthenticated) navigate("/login")
   }
 

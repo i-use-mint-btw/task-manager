@@ -1,9 +1,10 @@
+import { Modals } from "../../constants";
+import useGlobalState from "../../context/GlobalContext";
 import { Task as TaskModel } from "../../types";
 import styles from "./task.module.css";
 
 interface IProps {
   data: TaskModel;
-  onClick: (task: TaskModel) => void;
   id: string;
 }
 
@@ -16,11 +17,18 @@ export default function Task(props: IProps) {
     });
   }
 
+  const {setSelectedTask, setActiveModal} = useGlobalState()
+
+  function handleTaskClick() {
+    setSelectedTask(props.data)
+    setActiveModal(Modals.VIEW_TASK)
+  }
+
   return (
     <>
       <button
         className={styles.rootContainer}
-        onClick={() => props.onClick(props.data)}
+        onClick={handleTaskClick}
       >
         <div className={styles.mainContainer}>
           <p className={styles.taskTitle}>{props.data.title}</p>

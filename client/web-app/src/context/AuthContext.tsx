@@ -2,11 +2,9 @@ import {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { API_URL } from "../constants";
-import { useNavigate } from "react-router";
 
 type IProps = {
   children?: ReactNode;
@@ -15,6 +13,7 @@ type IProps = {
 type IAuthContext = {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>
 };
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
@@ -42,13 +41,28 @@ export function AuthProvider({ children }: IProps) {
 
       setIsAuthenticated(true);
       localStorage.setItem("authenticated", "true")
-    } catch (e) {
-      console.log("Failed to authenticate user");
+    } catch(e) {
+      console.log("Failed to login user, " + e);
+    }
+  }
+
+  async function register(email: string, password: string) {
+    try {
+      const res = await fetch(API_URL + "/users/register", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+    } catch(e) {
+      console.log("Failed to register user, " + e);
     }
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, register }}>
       {children}
     </AuthContext.Provider>
   );

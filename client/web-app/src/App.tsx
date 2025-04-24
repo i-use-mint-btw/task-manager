@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styles from "./app.module.css";
 import Sidebar from "./components/sidebar/Sidebar";
 import Header from "./components/header/Header";
@@ -8,58 +7,53 @@ import { Board as BoardModel, } from "./types";
 import Board from "./components/board/Board";
 import useFetch from "./hooks/useFetch";
 import useAuth from "./context/AuthContext";
-import { GlobalProvider } from "./context/GlobalContext";
+import ModalManager from "./components/modal-manager/ModalManager";
+import { useEffect } from "react";
+import useGlobalState from "./context/GlobalContext";
 
 export default function App() {
-  const [resourcesAdded, setResourcesAdded] = useState(0);
   // Get this to re-run when a new resource is added
+  const {selectedBoard, setSelectedBoard} = useGlobalState()
   const {
     payload: boards,
-    loading,
     error,
   } = useFetch<BoardModel[]>(API_URL + "/boards", "GET", {
     credentials: "include",
   });
 
-  function handleResourceAdded() {
-    setResourcesAdded((prev) => prev + 1);
-  }
+  useEffect(() => {
+    if (!boards || !selectedBoard) return
+    
+    for (const board of boards) {
+      if (board.id === selectedBoard?.id) {
+        setSelectedBoard(board)
+        return
+      }
+    }
+  }, [boards])
 
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) navigate("/login");
-
-  if (loading) return <Loading />;
+  if (error) return <NoBoards />
 
   return (
-    <GlobalProvider>
+    <>
+    <ModalManager />
       <div className={styles.rootContainer}>
-        <Sidebar
-          boards={boards}
-          onCreateNewBoardClick={handleCreateNewBoardClick}
-        />
+        <Sidebar boards={boards} />
         <div className={styles.mainContentContainer}>
-          <Header onAddNewTaskClick={handleAddNewTaskClick} />
+          <Header />
           <div className={styles.boardContainer}>
-            {boards === null ? (
-              <NoBoards />
-            ) : (
-              <Board
-                onTaskClick={handleTaskClick}
-              />
-            )}
+            <Board />
           </div>
         </div>
       </div>
-    </GlobalProvider>
+    </>
   );
 }
 
 function NoBoards() {
   return <div>There arent any available boards</div>;
-}
-
-function Loading() {
-  return <div>Loading...</div>;
 }

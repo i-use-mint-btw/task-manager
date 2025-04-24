@@ -1,24 +1,18 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../button/Button";
 import CreateSubtask from "../create-subtask/CreateSubtask";
 import Modal from "../modal/Modal";
 import styles from "./create-task-modal.module.css";
-import { API_URL } from "../../constants";
-import { CreateSubtask as CreateSubtaskModel } from "../../types";
+import { CreateSubtask as CreateSubtaskModel, CreateTask } from "../../types";
+import useGlobalState from "../../context/GlobalContext";
+import { createTask } from "../../api";
+import { Modals } from "../../constants";
 
-interface IProps {
-  visible: boolean;
-  toggleVisibility: () => void;
-  onOutOfBoundsClick: () => void;
-  onNewResourceAdded: Dispatch<SetStateAction<number>>;
-  boardID: string;
-}
-
-export default function CreateTaskModal(props: IProps) {
+export default function CreateTaskModal() {
+  const { selectedBoard, activeModal, setActiveModal, forceRefetch } = useGlobalState();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [status, setStatus] = useState<string>("todo");
-  const [timesSubmitted, setTimesSubmitted] = useState<number>(0);
   const [subtasks, setSubtasks] = useState<CreateSubtaskModel[]>([
     {
       id: 1,
@@ -33,11 +27,6 @@ export default function CreateTaskModal(props: IProps) {
       placeholder: "e.g. Drink coffee & smile",
     },
   ]);
-
-  function createNewTask() {
-    setTimesSubmitted((prev) => prev + 1);
-    props.toggleVisibility();
-  }
 
   function handleAddNewSubtask() {
     setSubtasks((prev) => {
@@ -75,49 +64,33 @@ export default function CreateTaskModal(props: IProps) {
     setSubtasks((prevSubtasks) => {
       return prevSubtasks.filter((prevSubtask) => prevSubtask.id !== id);
     });
-    console.log(subtasks);
   }
 
-  useEffect(() => {
-    if (timesSubmitted === 0) {
-      return;
-    }
+  async function handleCreateTaskClick() {
+    if (!selectedBoard) return;
 
-    async function createTask() {
-      try {
-        const res = await fetch(
-          API_URL + "/boards/" + props.boardID + "/tasks",
-          {
-            method: "POST",
-            credentials: "include",
-            body: JSON.stringify({
-              title: title,
-              description: description,
-              status: status,
-              subtasks: subtasks,
-            }),
-          }
-        );
+    try {
+      const res = await createTask(selectedBoard.id, {
+        title,
+        description,
+        status,
+        subtasks,
+      } as CreateTask);
 
-        if (res.status !== 201) {
-          throw new Error("Error when making request");
-        }
-
-        props.onNewResourceAdded((prev) => prev + 1);
-      } catch (e) {
-        console.error(e);
+      if (!res.ok) {
+        throw new Error("Error when making request");
       }
+      
+      setActiveModal(Modals.NONE)
+      forceRefetch()
+    } catch (e) {
+      console.error(e);
     }
-
-    createTask();
-  }, [timesSubmitted]);
+  }
 
   return (
     <>
-      <Modal
-        visible={props.visible}
-        onOutOfBoundsClick={props.onOutOfBoundsClick}
-      >
+      <Modal visible={activeModal === Modals.CREATE_TASK} onOutOfBoundsClick={() => {}}>
         <div
           onClick={(e) => e.stopPropagation()}
           className={styles.rootContainer}
@@ -181,13 +154,13 @@ export default function CreateTaskModal(props: IProps) {
               id="Status"
               onChange={(e) => setStatus(e.target.value.toLowerCase())}
             >
-              <option value="Todo">Todo</option>
-              <option value="Doing">Doing</option>
-              <option value="Done">Done</option>
+              <option value="todo">Todo</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
             </select>
           </div>
 
-          <Button onClick={createNewTask} label="Create Task" color="#645fc6" />
+          <Button onClick={handleCreateTaskClick} label="Create Task" color="#645fc6" />
         </div>
       </Modal>
     </>

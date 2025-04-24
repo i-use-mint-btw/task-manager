@@ -1,3 +1,5 @@
+import { Subtask } from "../types"
+
 export function debounce(delay: number, callback: () => void): () => void {
     let timer: number
 
@@ -5,4 +7,8 @@ export function debounce(delay: number, callback: () => void): () => void {
         clearTimeout(timer)
         timer = setTimeout(callback, delay)
     }
+}
+
+export function completeAllSubtasks(subtasks: Subtask[]): Subtask[] {
+    return subtasks.map(st => ({...st, completed: true}))
 }

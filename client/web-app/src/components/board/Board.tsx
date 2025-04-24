@@ -3,11 +3,7 @@ import { Task } from "../../types";
 import TaskColumn from "../task-column/TaskColumn";
 import styles from "./board.module.css";
 
-interface IProps {
-  onTaskClick: (task: Task) => void;
-}
-
-export default function Board(props: IProps) {
+export default function Board() {
   const { selectedBoard } = useGlobalState();
 
   const todo: Task[] = [];
@@ -43,19 +39,16 @@ export default function Board(props: IProps) {
               iconColor="#47c6e5"
               label="todo"
               tasks={todo}
-              onTaskClick={props.onTaskClick}
             />
             <TaskColumn
               iconColor="#826ef2"
               label="Doing"
               tasks={doing}
-              onTaskClick={props.onTaskClick}
             />
             <TaskColumn
               iconColor="#65e0ab"
               label="done"
               tasks={done}
-              onTaskClick={props.onTaskClick}
             />
           </div>
         )}

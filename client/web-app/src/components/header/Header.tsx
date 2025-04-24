@@ -3,14 +3,20 @@ import Button from "../button/Button";
 import styles from "./header.module.css";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import useGlobalState from "../../context/GlobalContext";
+import { Modals } from "../../constants";
 
-interface IProps {
-  onAddNewTaskClick: () => void;
-}
-
-export default function Header(props: IProps) {
+export default function Header() {
   const { toggleSidebar } = useGlobalState();
-  const { selectedBoard } = useGlobalState();
+  const { selectedBoard, setActiveModal } = useGlobalState();
+
+  function handleNewTaskClick() {
+    if (!selectedBoard) {
+      alert("Please select a board first.");
+      return;
+    }
+
+    setActiveModal(Modals.CREATE_TASK)
+  }
 
   return (
     <>
@@ -20,7 +26,7 @@ export default function Header(props: IProps) {
           <Button
             label="+Add New Task"
             color="#645fc6"
-            onClick={props.onAddNewTaskClick}
+            onClick={handleNewTaskClick}
           />
           <button className={styles.optionsButton} onClick={toggleSidebar}>
             <FontAwesomeIcon

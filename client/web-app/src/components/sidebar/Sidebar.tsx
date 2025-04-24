@@ -7,16 +7,15 @@ import BoardInfo from "../board-info/BoardInfo";
 import { Board } from "../../types";
 import CreateBoardButton from "../create-board-button/CreateBoardButton";
 import useGlobalState from "../../context/GlobalContext";
+import { Modals } from "../../constants";
 
 interface IProps {
   boards: Board[];
-  onCreateNewBoardClick: () => void;
 }
 
 export default function Sidebar(props: IProps) {
   const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(true);
-  const { isSidebarOpen, toggleSidebar } = useGlobalState();
-  const {selectedBoard} = useGlobalState()
+  const { isSidebarOpen, toggleSidebar, selectedBoard, setActiveModal } = useGlobalState();
 
   function handleDarkModeToggle() {
     setIsDarkModeEnabled((prev) => !prev);
@@ -27,16 +26,15 @@ export default function Sidebar(props: IProps) {
       <>
         <div className={styles.rootContainer}>
           <div className={styles.sidebarLogoContainer}>
-            {/* supposed to render the site logo here */}
             {<h1 className={styles.sidebarTitle}>Kanban</h1>}
           </div>
           <p className={styles.boardCounter}>
-            All Boards ({props.boards.length})
+            All Boards ({props.boards ? props.boards.length : "0"})
           </p>
           <div className={styles.mainSidebarContentContainer}>
             <div className={styles.mainBoardInfoContainer}>
-              {props.boards.length < 1 &&
-                props.boards.map((board: Board, i: number) => {
+              {props?.boards && props?.boards?.length > 0 &&
+                props?.boards?.map((board: Board, i: number) => {
                   if (board.id === selectedBoard?.id) {
                     return (
                       <BoardInfo
@@ -54,7 +52,7 @@ export default function Sidebar(props: IProps) {
                     />
                   );
                 })}
-              <CreateBoardButton onClick={props.onCreateNewBoardClick} />
+              <CreateBoardButton onClick={() => setActiveModal(Modals.CREATE_BOARD)} />
             </div>
             <div className={styles.sidebarButtonsContainer}>
               <div className={styles.darkModeToggleContainer}>

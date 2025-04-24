@@ -1,51 +1,37 @@
 import { useState } from "react";
 import Modal from "../modal/Modal";
 import styles from "./create-board-modal.module.css";
-import { API_URL } from "../../constants";
+import { createBoard } from "../../api";
+import useGlobalState from "../../context/GlobalContext";
+import { Modals } from "../../constants";
 
-interface IProps {
-  visible: boolean;
-  onOutOfBoundsClick: () => void;
-  onResourceAdded: () => void;
-}
-
-export default function CreateBoardModal(props: IProps) {
+export default function CreateBoardModal() {
   const [title, setTitle] = useState<string>("");
-  const [error, setError] = useState<unknown | null>();
+  const {activeModal, setActiveModal, forceRefetch} = useGlobalState()
 
   async function handleOutOfBoundsClick() {
-    if (title.length < 1) {
-      props.onOutOfBoundsClick();
-      return;
-    }
+    if (title.length < 1) return;
 
-    setError(null);
     try {
-      const res = await fetch(API_URL + "/boards", {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({
-          title: title,
-        }),
-      });
+      const res = await createBoard(title)
 
       if (!res.ok) {
         throw new Error("Error when trying to create a new board");
       }
 
-      props.onResourceAdded();
-    } catch (err) {
-      setError(err);
+      setActiveModal(Modals.NONE)
+      forceRefetch()
+    } catch (e) {
+      console.error(e)
     }
 
-    props.onOutOfBoundsClick();
     setTitle("");
   }
 
   return (
     <>
       <Modal
-        visible={props.visible}
+        visible={activeModal === Modals.CREATE_BOARD}
         onOutOfBoundsClick={handleOutOfBoundsClick}
       >
         <div

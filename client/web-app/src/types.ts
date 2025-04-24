@@ -13,6 +13,13 @@ export interface Task {
     subtasks: Subtask[]
 }
 
+export interface CreateTask {
+    title: string
+    description: string
+    status: TaskStatus
+    subtasks: CreateSubtask[]
+}
+
 export interface Subtask {
     title: string
     completed: boolean
