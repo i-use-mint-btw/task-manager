@@ -3,6 +3,9 @@
   margin: 0; 
   padding: 0;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: transparent rgb(100,100,100);
+  scrollbar-width: none;
 }
 
 body {
