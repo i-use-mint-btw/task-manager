@@ -53,9 +53,9 @@ func handlePostOnLogin(w http.ResponseWriter, r *http.Request) {
 		Name: "session_id",
 		Value: sessionID,
 		HttpOnly: true, // Prevents access by frontend javascript
-		//Path: "/api",  // specifies the path that must exist in the URL for a cookie to be sent (e.g. path="/api/users" means the cookie could only be sent to that route)
-		//SameSite: http.SameSiteStrictMode, // says that the cookie cannot be accessed by third party domains
-		//Secure: false, // only sent over https
+		Path: "/",  // specifies the path that must exist in the URL for a cookie to be sent (e.g. path="/api/users" means the cookie could only be sent to that route)
+		SameSite: http.SameSiteLaxMode, // says that the cookie cannot be accessed by third party domains
+		Secure: false, // only sent over https
 		// Domain: "*", // specifies which server can receive a cookie (this domain by default and does not include subdomains)
 	})
 	w.Write([]byte("User logged in successfully"))

@@ -33,6 +33,10 @@ export function AuthProvider({ children }: IProps) {
       const res = await fetch(API_URL + "/users/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-type": "application/json"
+        },
+        credentials: "include"
       });
 
       if (!res.ok) {

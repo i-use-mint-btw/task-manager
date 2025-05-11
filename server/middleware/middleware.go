@@ -37,6 +37,15 @@ func Cors(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:5173")
 		w.Header().Add("Access-Control-Allow-Credentials", "true")
+		w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+		// Preflight request
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent) // 204 No Content
+			return
+	}
+
 		next.ServeHTTP(w, r)
 	}
 }
