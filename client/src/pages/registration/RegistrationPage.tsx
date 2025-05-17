@@ -10,13 +10,19 @@ import useAuth from "../../context/AuthContext";
 export default function RegistrationPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const {isAuthenticated, register} = useAuth()
+  const { register, setIsAuthenticated } = useAuth()
+  const [errorMessage, setErrorMessage] = useState("")
   const navigate = useNavigate();
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    await register(email, password)
-    if (isAuthenticated) navigate("/login")
+    const res = await register(email, password)
+    if (res.ok) {
+      setIsAuthenticated(true)
+      navigate("/login")
+      return
+    }
+    if (res.status === 409) setErrorMessage("Error: user already exists")
   }
 
   return (
@@ -33,7 +39,7 @@ export default function RegistrationPage() {
             />
             <input
               className={styles.formInput}
-              type="text"
+              type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -45,7 +51,8 @@ export default function RegistrationPage() {
               Submit
             </button>
           </form>
-          <p style={{marginTop: "20px"}} >
+          <p style={{ color: "red" }}>{errorMessage}</p>
+          <p style={{ marginTop: "20px" }} >
             Already have an account?
             <Link to="/login"> log in</Link>
           </p>

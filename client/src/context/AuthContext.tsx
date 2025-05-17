@@ -1,5 +1,6 @@
 import {
   createContext,
+  Dispatch,
   ReactNode,
   useContext,
   useState,
@@ -12,8 +13,9 @@ type IProps = {
 
 type IAuthContext = {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>
+  setIsAuthenticated: Dispatch<React.SetStateAction<boolean>>
+  login: (email: string, password: string) => Promise<Response>;
+  register: (email: string, password: string) => Promise<Response>;
 };
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
@@ -29,8 +31,9 @@ export function AuthProvider({ children }: IProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(checkAuthStatus);
 
   async function login(email: string, password: string) {
+    let res: Response
     try {
-      const res = await fetch(API_URL + "/users/login", {
+      res = await fetch(API_URL + "/users/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
@@ -39,20 +42,17 @@ export function AuthProvider({ children }: IProps) {
         credentials: "include"
       });
 
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
-
-      setIsAuthenticated(true);
       localStorage.setItem("authenticated", "true")
     } catch(e) {
       console.log("Failed to login user, " + e);
     }
+    return res!
   }
 
   async function register(email: string, password: string) {
+    let res: Response
     try {
-      const res = await fetch(API_URL + "/users/register", {
+      res = await fetch(API_URL + "/users/register", {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
@@ -60,16 +60,15 @@ export function AuthProvider({ children }: IProps) {
         },
       });
 
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
     } catch(e) {
       console.log("Failed to register user, " + e);
     }
+
+    return res!
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, register }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, register }}>
       {children}
     </AuthContext.Provider>
   );
