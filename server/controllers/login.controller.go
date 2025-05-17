@@ -10,7 +10,7 @@ import (
 	"github.com/i-use-mint-btw/kanban-task-manager/utils"
 )
 
-func LoginController(w http.ResponseWriter, r * http.Request) {
+func LoginController(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		handlePostOnLogin(w, r)
@@ -36,6 +36,20 @@ func handlePostOnLogin(w http.ResponseWriter, r *http.Request) {
 
 	user, err := services.FindUserByEmail(dto.Email)
 
+	if err == nil && len(*user.SessionID) > 0 {
+		http.SetCookie(w, &http.Cookie{
+			Name:     "session_id",
+			Value:    *user.SessionID,
+			HttpOnly: true,                 // Prevents access by frontend javascript
+			Path:     "/",                  // specifies the path that must exist in the URL for a cookie to be sent (e.g. path="/api/users" means the cookie could only be sent to that route)
+			SameSite: http.SameSiteLaxMode, // says that the cookie cannot be accessed by third party domains
+			Secure:   false,                // only sent over https
+			// Domain: "*", // specifies which server can receive a cookie (this domain by default and does not include subdomains)
+		})
+		w.Write([]byte("User logged in successfully"))
+		return
+	}
+
 	if err != nil {
 		http.Error(w, "User does not exist", http.StatusNotFound)
 		return
@@ -50,12 +64,12 @@ func handlePostOnLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name: "session_id",
-		Value: sessionID,
-		HttpOnly: true, // Prevents access by frontend javascript
-		Path: "/",  // specifies the path that must exist in the URL for a cookie to be sent (e.g. path="/api/users" means the cookie could only be sent to that route)
+		Name:     "session_id",
+		Value:    sessionID,
+		HttpOnly: true,                 // Prevents access by frontend javascript
+		Path:     "/",                  // specifies the path that must exist in the URL for a cookie to be sent (e.g. path="/api/users" means the cookie could only be sent to that route)
 		SameSite: http.SameSiteLaxMode, // says that the cookie cannot be accessed by third party domains
-		Secure: false, // only sent over https
+		Secure:   false,                // only sent over https
 		// Domain: "*", // specifies which server can receive a cookie (this domain by default and does not include subdomains)
 	})
 	w.Write([]byte("User logged in successfully"))
