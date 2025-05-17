@@ -1,15 +1,16 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
-	"os"
 	"log"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 var Config AppConfig
 
 type AppConfig struct {
-	DBURL  			string
+	DBURL           string
 	ALLOWED_ORIGINS string
 }
 
@@ -21,9 +22,11 @@ func SetupConfig() error {
 	}
 
 	Config = AppConfig{
-		DBURL: os.Getenv("DB_URL"),
+		DBURL:           os.Getenv("DB_URL"),
 		ALLOWED_ORIGINS: os.Getenv("ALLOWED_ORIGINS"),
 	}
+
+	log.Println("DB at: ", Config.DBURL, " Allowed origins are: ", Config.ALLOWED_ORIGINS)
 
 	return nil
 }
