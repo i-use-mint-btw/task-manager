@@ -47,8 +47,7 @@ func main() {
 		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
 	})
 
-	wrappedMux := cors.Default().Handler(middleware.LogRequest(mux))
-	wrappedMux = c.Handler(wrappedMux)
+	wrappedMux := c.Handler(middleware.LogRequest(mux))
 
 	fmt.Println("Server is up and running")
 	http.ListenAndServe(":2680", wrappedMux)
