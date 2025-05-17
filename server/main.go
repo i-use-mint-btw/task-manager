@@ -29,8 +29,15 @@ func main() {
 	}
 	defer storage.CloseDB()
 
-	mux := http.NewServeMux() // Router
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{config.Config.ALLOWED_ORIGINS},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
+	})
 
+	mux := http.NewServeMux() // Router
+	wrappedMux := middleware.LogRequest(c.Handler(mux))
+	
 	mux.HandleFunc("/api/users/login", controllers.LoginController)
 	mux.HandleFunc("/api/users/register", controllers.RegisterController)
 	mux.HandleFunc("/api/boards", middleware.Authenticate(controllers.BoardsController))
@@ -40,14 +47,6 @@ func main() {
 	mux.HandleFunc("/api/boards/{boardID}/tasks/{taskID}/subtasks", middleware.Authenticate(controllers.SubtasksController))
 	mux.HandleFunc("/api/boards/{boardID}/tasks/{taskID}/subtasks/{subtaskID}", middleware.Authenticate(controllers.IDBasedSubtasksController))
 	mux.HandleFunc("/*", func(w http.ResponseWriter, r *http.Request) { http.Error(w, "Invalid route", http.StatusNotFound) })
-
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{config.Config.ALLOWED_ORIGINS},
-		AllowCredentials: true,
-		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
-	})
-
-	wrappedMux := c.Handler(middleware.LogRequest(mux))
 
 	fmt.Println("Server is up and running")
 	http.ListenAndServe(":2680", wrappedMux)
