@@ -12,6 +12,9 @@ export async function createTask(boardID: string, task: CreateTask) {
       status: task.status,
       subtasks: task.subtasks,
     }),
+    headers: {
+      "Content-Type": "application/json"
+    },
   });
 }
 
@@ -28,6 +31,9 @@ export async function updateTaskByID(boardID: string, task: Task) {
       subtasks:
         status === "done" ? completeAllSubtasks(task.subtasks) : task.subtasks,
     }),
+    headers: {
+      "Content-Type": "application/json"
+    },
   });
 }
 
@@ -36,5 +42,8 @@ export async function createBoard(title: string) {
     method: "POST",
     credentials: "include",
     body: JSON.stringify({ title }),
+    headers: {
+      "Content-Type": "application/json"
+    },
   });
 }

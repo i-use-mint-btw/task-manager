@@ -34,7 +34,7 @@ export function AuthProvider({ children }: IProps) {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
-          "Content-type": "application/json"
+          "Content-Type": "application/json"
         },
         credentials: "include"
       });
@@ -55,6 +55,9 @@ export function AuthProvider({ children }: IProps) {
       const res = await fetch(API_URL + "/users/register", {
         method: "POST",
         body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-Type": "application/json"
+        },
       });
 
       if (!res.ok) {
