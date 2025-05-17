@@ -1,7 +1,7 @@
 import { Subtask } from "../types"
 
 export function debounce(delay: number, callback: () => void): () => void {
-    let timer: number
+    let timer
 
     return () => {
         clearTimeout(timer)
