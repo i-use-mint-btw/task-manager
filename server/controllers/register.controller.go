@@ -35,10 +35,10 @@ func handlePostOnRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: Fix this  section (for some reason this dosent fire when the user already exists and instead triggers an internal server error)
-	_, err = services.FindUserByEmail(dto.Email)
+	user, err := services.FindUserByEmail(dto.Email)
 
-	if err == nil {
-		http.Error(w, "User already exists", http.StatusNotModified)
+	if user != nil && err == nil {
+		http.Error(w, "User already exists", http.StatusConflict)
 		return
 	}
 
