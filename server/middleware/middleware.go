@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/i-use-mint-btw/kanban-task-manager/config"
 	"github.com/i-use-mint-btw/kanban-task-manager/services"
 )
 
@@ -35,7 +36,7 @@ func LogRequest(next http.Handler) http.HandlerFunc {
 
 func Cors(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:5173")
+		w.Header().Add("Access-Control-Allow-Origin", config.Config.ALLOWED_ORIGINS)
 		w.Header().Add("Access-Control-Allow-Credentials", "true")
 		w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")

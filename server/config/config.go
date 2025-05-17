@@ -9,9 +9,8 @@ import (
 var Config AppConfig
 
 type AppConfig struct {
-	DBNAME string 
-	DBUSER string
-	DBPASS string
+	DBURL  			string
+	ALLOWED_ORIGINS string
 }
 
 func SetupConfig() error {
@@ -22,9 +21,8 @@ func SetupConfig() error {
 	}
 
 	Config = AppConfig{
-		DBNAME: getEnv("DB_NAME", ""),	
-		DBUSER: getEnv("DB_USER", ""),
-        DBPASS: getEnv("DB_PASS", ""),
+		DBURL: getEnv("DB_URL", ""),
+		ALLOWED_ORIGINS: getEnv("ALLOWED_ORIGINS", ""),
 	}
 
 	return nil
