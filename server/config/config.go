@@ -17,21 +17,13 @@ func SetupConfig() error {
 	err := godotenv.Load()
 
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Error loading local .env file, falling back to system environment variables")
 	}
 
 	Config = AppConfig{
-		DBURL: getEnv("DB_URL", ""),
-		ALLOWED_ORIGINS: getEnv("ALLOWED_ORIGINS", ""),
+		DBURL: os.Getenv("DB_URL"),
+		ALLOWED_ORIGINS: os.Getenv("ALLOWED_ORIGINS"),
 	}
 
 	return nil
-}
-
-func getEnv(key, fallback string) string {
-    value := os.Getenv(key)
-    if value == "" {
-        return fallback
-    }
-    return value
 }
