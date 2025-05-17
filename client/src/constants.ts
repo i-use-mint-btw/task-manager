@@ -1,5 +1,5 @@
 //@ts-ignore
-export const API_URL = import.meta.env.BACKEND_URL
+export const API_URL = import.meta.env.BACKEND_URL + "/api"
 
 export enum Modals {
     VIEW_TASK,
