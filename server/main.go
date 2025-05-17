@@ -11,6 +11,7 @@ import (
 	"github.com/i-use-mint-btw/kanban-task-manager/middleware"
 	"github.com/i-use-mint-btw/kanban-task-manager/storage"
 	"github.com/i-use-mint-btw/kanban-task-manager/utils"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -40,7 +41,14 @@ func main() {
 	mux.HandleFunc("/api/boards/{boardID}/tasks/{taskID}/subtasks/{subtaskID}", middleware.Authenticate(controllers.IDBasedSubtasksController))
 	mux.HandleFunc("/*", func(w http.ResponseWriter, r *http.Request) { http.Error(w, "Invalid route", http.StatusNotFound) })
 
-	wrappedMux := middleware.Cors(middleware.LogRequest(mux))
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{config.Config.ALLOWED_ORIGINS},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
+	})
+
+	wrappedMux := cors.Default().Handler(middleware.LogRequest(mux))
+	wrappedMux = c.Handler(wrappedMux)
 
 	fmt.Println("Server is up and running")
 	http.ListenAndServe(":2680", wrappedMux)
