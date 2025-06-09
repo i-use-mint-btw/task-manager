@@ -3,6 +3,7 @@ import { CreateTask, Task, TaskStatus } from "./types";
 import { completeAllSubtasks } from "./utils/utils";
 
 export async function createTask(boardID: string, task: CreateTask) {
+  
   return fetch(API_URL + "/boards/" + boardID + "/tasks", {
     method: "POST",
     credentials: "include",
@@ -10,7 +11,7 @@ export async function createTask(boardID: string, task: CreateTask) {
       title: task.title,
       description: task.description,
       status: task.status,
-      subtasks: task.subtasks,
+      subtasks: task.subtasks.filter(subtask => subtask.title !== ""),
     }),
     headers: {
       "Content-Type": "application/json"

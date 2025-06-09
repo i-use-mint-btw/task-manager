@@ -10,7 +10,7 @@ import (
 	"github.com/i-use-mint-btw/kanban-task-manager/utils"
 )
 
-func BoardsController(w http.ResponseWriter, r * http.Request) {
+func BoardsController(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		handleGetOnBoards(w, r)
@@ -21,7 +21,7 @@ func BoardsController(w http.ResponseWriter, r * http.Request) {
 	}
 }
 
-func handleGetOnBoards(w http.ResponseWriter, r * http.Request) {
+func handleGetOnBoards(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_id")
 
 	if err != nil {
@@ -55,7 +55,7 @@ func handleGetOnBoards(w http.ResponseWriter, r * http.Request) {
 	w.Write(boardsAsJSON)
 }
 
-func handlePostOnBoards(w http.ResponseWriter, r * http.Request) {
+func handlePostOnBoards(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_id")
 
 	if err != nil {
@@ -95,20 +95,18 @@ func handlePostOnBoards(w http.ResponseWriter, r * http.Request) {
 	w.Write([]byte("Board created successfully"))
 }
 
-
 func IDBasedBoardsController(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPut:
 		handlePutOnBoards(w, r)
 	case http.MethodDelete:
-		handleDeleteOnBoards(w,r)
+		handleDeleteOnBoards(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
-
-func handlePutOnBoards(w http.ResponseWriter, r * http.Request) {
+func handlePutOnBoards(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -146,7 +144,7 @@ func handlePutOnBoards(w http.ResponseWriter, r * http.Request) {
 	w.Write([]byte("Resource successfully updated"))
 }
 
-func handleDeleteOnBoards(w http.ResponseWriter, r * http.Request) {
+func handleDeleteOnBoards(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return

@@ -37,7 +37,7 @@ func main() {
 
 	mux := http.NewServeMux() // Router
 	wrappedMux := middleware.LogRequest(c.Handler(mux))
-	
+
 	mux.HandleFunc("/api/users/login", controllers.LoginController)
 	mux.HandleFunc("/api/users/register", controllers.RegisterController)
 	mux.HandleFunc("/api/boards", middleware.Authenticate(controllers.BoardsController))

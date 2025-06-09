@@ -8,6 +8,7 @@ import (
 	"github.com/i-use-mint-btw/kanban-task-manager/dtos"
 	"github.com/i-use-mint-btw/kanban-task-manager/services"
 	"github.com/i-use-mint-btw/kanban-task-manager/utils"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func LoginController(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +37,19 @@ func handlePostOnLogin(w http.ResponseWriter, r *http.Request) {
 
 	user, err := services.FindUserByEmail(dto.Email)
 
-	if err == nil && len(*user.SessionID) > 0 {
+	if err != nil {
+		http.Error(w, "User does not exist", http.StatusNotFound)
+		return
+	}
+	
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(dto.Password))
+
+	if err != nil {
+		http.Error(w, "Incorrect username or password", http.StatusNotFound)
+		return
+	}
+
+	if len(*user.SessionID) > 0 {
 		http.SetCookie(w, &http.Cookie{
 			Name:     "session_id",
 			Value:    *user.SessionID,
@@ -47,11 +60,6 @@ func handlePostOnLogin(w http.ResponseWriter, r *http.Request) {
 			// Domain: "*", // specifies which server can receive a cookie (this domain by default and does not include subdomains)
 		})
 		w.Write([]byte("User logged in successfully"))
-		return
-	}
-
-	if err != nil {
-		http.Error(w, "User does not exist", http.StatusNotFound)
 		return
 	}
 

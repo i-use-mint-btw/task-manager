@@ -11,7 +11,7 @@ import { Modals } from "../../constants";
 export default function CreateTaskModal() {
   const { selectedBoard, activeModal, setActiveModal, forceRefetch } = useGlobalState();
   const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [description, setDescription] = useState<string>("No description provided");
   const [status, setStatus] = useState<string>("todo");
   const [subtasks, setSubtasks] = useState<CreateSubtaskModel[]>([
     {
@@ -99,7 +99,7 @@ export default function CreateTaskModal() {
 
           <div className={styles.metadataInputContainer}>
             <label className={styles.label} htmlFor="title">
-              Title
+              Title *
             </label>
             <input
               name="title"

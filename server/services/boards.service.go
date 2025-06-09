@@ -2,6 +2,7 @@ package services
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/i-use-mint-btw/kanban-task-manager/dtos"
 	"github.com/i-use-mint-btw/kanban-task-manager/models"
@@ -27,6 +28,7 @@ func FindBoards(userID string) (*[]models.Board, error) {
 		}
 
 		if err != nil && err != sql.ErrNoRows {
+			fmt.Println("Could not read board", err)
 			return nil, err
 		}
 
