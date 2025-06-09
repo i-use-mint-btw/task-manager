@@ -49,7 +49,7 @@ func handlePostOnLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if len(*user.SessionID) > 0 {
+	if user.SessionID != nil {
 		http.SetCookie(w, &http.Cookie{
 			Name:     "session_id",
 			Value:    *user.SessionID,

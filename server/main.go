@@ -27,13 +27,18 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize database. %e", err)
 	}
-	defer storage.CloseDB()
+	defer func(){
+		idk := recover()
+		fmt.Println(idk)
+		//storage.CloseDB()
+	}()
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{config.Config.ALLOWED_ORIGINS},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
 	})
+	fmt.Println(config.Config.ALLOWED_ORIGINS, config.Config.DBURL)
 
 	mux := http.NewServeMux() // Router
 	wrappedMux := middleware.LogRequest(c.Handler(mux))
